@@ -22,21 +22,21 @@ public class JdbcProductsRepository implements ProductsRepository {
     @Override
     public int saveProduct(Products product) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        simpleJdbcInsert.withTableName("PRODUCTS").usingGeneratedKeyColumns("PRODUCT_ID");
+        simpleJdbcInsert.withTableName("PRODUCTS").usingGeneratedKeyColumns("ID");
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("BARCODE", product.getBarcode());
         parameters.put("NAME", product.getName());
         parameters.put("PRICE", product.getPrice());
         parameters.put("QUANTITY", product.getQuantity());
-        parameters.put("location", product.getLocation());
+        parameters.put("LOCATION", product.getLocation());
 
         return simpleJdbcInsert.executeAndReturnKey(parameters).intValue();
     }
 
     @Override
-    public Optional<Products> readProductById(int productId) {
-        List<Products> rs = jdbcTemplate.query("SELECT * FROM PRODUCTS WHERE PRODUCT_ID = ?", productRowMapper(), productId);
+    public Optional<Products> readProductById(int id) {
+        List<Products> rs = jdbcTemplate.query("SELECT * FROM PRODUCTS WHERE ID = ?", productRowMapper(), id);
         return rs.stream().findFirst();
     }
 
@@ -48,8 +48,8 @@ public class JdbcProductsRepository implements ProductsRepository {
 
     @Override
     public int updateProductQuantity(Products product) {
-        jdbcTemplate.update("update PRODUCTS set QUANTITY = ? WHERE PRODUCT_ID =?", product.getQuantity(), product.getProductId());
-        return product.getProductId();
+        jdbcTemplate.update("update PRODUCTS set QUANTITY = ? WHERE ID =?", product.getQuantity(), product.getId());
+        return product.getId();
     }
 
     @Override
@@ -65,7 +65,7 @@ public class JdbcProductsRepository implements ProductsRepository {
 
     private RowMapper<Products> productRowMapper() {
         return (rs, rowNum) -> new Products(
-                    rs.getInt("PRODUCT_ID"),
+                    rs.getInt("ID"),
                     rs.getString("BARCODE"),
                     rs.getString("NAME"),
                     rs.getInt("PRICE"),

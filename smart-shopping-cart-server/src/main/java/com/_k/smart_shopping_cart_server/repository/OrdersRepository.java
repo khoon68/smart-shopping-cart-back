@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface OrdersRepository {
     int saveOrder();
-    Optional<Orders> readOrderByOrderId(int orderId);
+    Optional<Orders> readOrderByOrderId(int id);
     List<Orders> readAllOrder();
     int updateOrder(Orders order);
     void deleteAllOrder();

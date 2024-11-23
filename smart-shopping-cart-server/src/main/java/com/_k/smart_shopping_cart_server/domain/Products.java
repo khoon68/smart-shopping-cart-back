@@ -5,7 +5,7 @@ import lombok.Setter;
 
 @Getter
 public class Products {
-    private int productId;
+    private int id;
     private String barcode;
     private String name;
     private int price;
@@ -25,8 +25,8 @@ public class Products {
         this.location = location;
     }
 
-    public Products(int productId, String barcode, String name, int price, int quantity, String location) {
-        this.productId = productId;
+    public Products(int id, String barcode, String name, int price, int quantity, String location) {
+        this.id = id;
         this.barcode = barcode;
         this.name = name;
         this.price = price;

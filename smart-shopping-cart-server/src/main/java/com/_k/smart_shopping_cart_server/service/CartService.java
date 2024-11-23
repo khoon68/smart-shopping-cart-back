@@ -1,9 +1,9 @@
 package com._k.smart_shopping_cart_server.service;
 
-import com._k.smart_shopping_cart_server.domain.Cart;
+import com._k.smart_shopping_cart_server.domain.Carts;
 
 public interface CartService {
-    String generateCart(Cart cart);
-    Cart showCartById(String cartId);
-    String changeOrderId(Cart cart, int orderId);
+    String generateCart(Carts cart);
+    Carts showCartById(String cartId);
+    String changeOrderId(Carts cart, int orderId);
 }

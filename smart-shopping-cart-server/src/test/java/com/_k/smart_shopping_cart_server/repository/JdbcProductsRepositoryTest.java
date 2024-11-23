@@ -20,6 +20,7 @@ class JdbcProductsRepositoryTest {
 
     @BeforeEach
     void beforeEach() {
+        productsRepository.deleteAllProduct();
         productsRepository.saveProduct(new Products("1", "A", 1000, 5, "1번 진열장"));
         productsRepository.saveProduct(new Products("2", "B", 2000, 10, "2번 진열장"));
     }

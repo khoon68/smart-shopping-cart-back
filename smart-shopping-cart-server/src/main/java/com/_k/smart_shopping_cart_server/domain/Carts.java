@@ -4,17 +4,17 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Getter
-public class Cart {
-    private String cartId;
+public class Carts {
+    private String id;
     @Setter
     private int orderId;
 
-    public Cart(String cartId) {
-        this.cartId = cartId;
+    public Carts(String id) {
+        this.id = id;
     }
 
-    public Cart(String cartId, int orderId) {
-        this.cartId = cartId;
+    public Carts(String id, int orderId) {
+        this.id = id;
         this.orderId = orderId;
     }
 }

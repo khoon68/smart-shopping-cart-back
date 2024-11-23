@@ -7,13 +7,13 @@ import java.sql.Timestamp;
 
 @Getter
 public class Orders {
-    private int orderId;
+    private int id;
     @Setter
     private String orderDateTime;
 
     public Orders() {}
-    public Orders(int orderId, String orderDateTime) {
-        this.orderId = orderId;
+    public Orders(int id, String orderDateTime) {
+        this.id = id;
         this.orderDateTime = orderDateTime;
     }
 }

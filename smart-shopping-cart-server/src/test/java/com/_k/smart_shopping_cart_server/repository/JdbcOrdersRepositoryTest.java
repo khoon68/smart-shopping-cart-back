@@ -2,6 +2,7 @@ package com._k.smart_shopping_cart_server.repository;
 
 import com._k.smart_shopping_cart_server.domain.Orders;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,14 +18,28 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class JdbcOrdersRepositoryTest {
     @Autowired
+    ProductsRepository productsRepository;
+    @Autowired
     OrdersRepository ordersRepository;
+    @Autowired
+    OrderDetailsRepository orderDetailsRepository;
+    @Autowired
+    CartsRepository cartsRepository;
+
+    @BeforeEach
+    void beforeEach() {
+        productsRepository.deleteAllProduct();
+        ordersRepository.deleteAllOrder();
+        orderDetailsRepository.deleteAllOrderDetail();
+        cartsRepository.deleteAllCart();
+    }
 
     @Test
     void insertAndReadOrderTest() {
         int savedOrderId = ordersRepository.saveOrder();
         Orders readOrder = ordersRepository.readOrderByOrderId(savedOrderId).get();
 
-        Assertions.assertThat(readOrder.getOrderId()).isEqualTo(savedOrderId);
+        Assertions.assertThat(readOrder.getId()).isEqualTo(savedOrderId);
     }
 
     @Test

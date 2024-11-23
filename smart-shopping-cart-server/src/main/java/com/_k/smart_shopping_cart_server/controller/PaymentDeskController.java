@@ -1,6 +1,6 @@
 package com._k.smart_shopping_cart_server.controller;
 
-import com._k.smart_shopping_cart_server.domain.Cart;
+import com._k.smart_shopping_cart_server.domain.Carts;
 import com._k.smart_shopping_cart_server.domain.OrderDetails;
 import com._k.smart_shopping_cart_server.domain.Products;
 import com._k.smart_shopping_cart_server.dto.ResponseWrapper;
@@ -39,8 +39,8 @@ public class PaymentDeskController {
         List<Map<String, Object>> detailList = new ArrayList<>();
 
         try {
-            Cart cart = cartService.showCartById(cartId);
-            List<OrderDetails> orderDetailList = orderDetailsService.showOrderDetailListByDetailId(cart.getOrderId());
+            Carts cart = cartService.showCartById(cartId);
+            List<OrderDetails> orderDetailList = orderDetailsService.showOrderDetailListByOrderId(cart.getOrderId());
 
             orderData.put("orderId", cart.getOrderId());
 
@@ -49,7 +49,7 @@ public class PaymentDeskController {
                 Products product = productsService.showProductInfoById(orderDetail.getProductId());
                 detail.put("productName", product.getName());
                 detail.put("productPrice", product.getPrice());
-                detail.put("quantity", orderDetail.getProductQuantity());
+                detail.put("quantity", orderDetail.getQuantity());
                 detailList.add(detail);
             }
             orderData.put("orderTime", ordersService.fillInOrder(cart.getOrderId()));
@@ -69,10 +69,10 @@ public class PaymentDeskController {
         ResponseWrapper resWrapper = new ResponseWrapper<>();
 
         try {
-            List<OrderDetails> orderDetailList = orderDetailsService.showOrderDetailListByDetailId(orderId);
+            List<OrderDetails> orderDetailList = orderDetailsService.showOrderDetailListByOrderId(orderId);
             for(OrderDetails orderDetail: orderDetailList) {
                 Products product = productsService.showProductInfoById(orderDetail.getProductId());
-                productsService.changeProductQuantity(product.getProductId(), orderDetail.getProductQuantity());
+                productsService.changeProductQuantity(product.getId(), orderDetail.getQuantity());
             }
 
             return new ResponseEntity<>(resWrapper, HttpStatus.ACCEPTED);

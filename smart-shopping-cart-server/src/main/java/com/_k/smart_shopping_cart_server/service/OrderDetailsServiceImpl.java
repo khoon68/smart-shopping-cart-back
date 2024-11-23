@@ -26,7 +26,7 @@ public class OrderDetailsServiceImpl implements OrderDetailsService{
     }
 
     @Override
-    public List<OrderDetails> showOrderDetailListByDetailId(int orderId) {
+    public List<OrderDetails> showOrderDetailListByOrderId(int orderId) {
         return orderDetailsRepository.readOrderDetailListByOrderId(orderId);
     }
 }

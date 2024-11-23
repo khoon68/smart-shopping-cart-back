@@ -1,6 +1,5 @@
 package com._k.smart_shopping_cart_server.controller;
 
-import com._k.smart_shopping_cart_server.domain.Cart;
 import com._k.smart_shopping_cart_server.domain.OrderDetails;
 import com._k.smart_shopping_cart_server.domain.Products;
 import com._k.smart_shopping_cart_server.dto.CartItemForm;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.HashMap;
 import java.util.List;
 
 @RestController

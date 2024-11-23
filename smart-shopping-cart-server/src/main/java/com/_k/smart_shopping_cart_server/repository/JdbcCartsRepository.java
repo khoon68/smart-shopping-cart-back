@@ -1,6 +1,6 @@
 package com._k.smart_shopping_cart_server.repository;
 
-import com._k.smart_shopping_cart_server.domain.Cart;
+import com._k.smart_shopping_cart_server.domain.Carts;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.simple.SimpleJdbcInsert;
@@ -10,43 +10,43 @@ import javax.sql.DataSource;
 import java.util.*;
 
 @Repository
-public class JdbcCartRepository implements CartRepository{
+public class JdbcCartsRepository implements CartsRepository {
     private final JdbcTemplate jdbcTemplate;
 
-    public JdbcCartRepository(DataSource dataSource) {
+    public JdbcCartsRepository(DataSource dataSource) {
         jdbcTemplate = new JdbcTemplate(dataSource);
     }
 
     @Override
-    public String saveCart(Cart cart) {
+    public String saveCart(Carts cart) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
         simpleJdbcInsert.withTableName("CARTS");
 
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("CART_ID", cart.getCartId());
+        parameters.put("ID", cart.getId());
         simpleJdbcInsert.execute(parameters);
 
-        return cart.getCartId();
+        return cart.getId();
     }
 
     @Override
-    public Optional<Cart> readCartByCartId(String cartId) {
-        List<Cart> result = jdbcTemplate.query("SELECT * FROM CARTS WHERE CART_ID = ?", cartRowMapper(), cartId);
+    public Optional<Carts> readCartByCartId(String id) {
+        List<Carts> result = jdbcTemplate.query("SELECT * FROM CARTS WHERE ID = ?", cartRowMapper(), id);
         return result.stream().findFirst();
     }
 
     @Override
-    public List<Cart> readAllCart() {
+    public List<Carts> readAllCart() {
         return jdbcTemplate.query("SELECT * FROM CARTS", cartRowMapper());
     }
 
     @Override
-    public String updateOrderId(Cart cart) {
+    public String updateOrderId(Carts cart) {
         jdbcTemplate.update(
-                "UPDATE CARTS SET ORDER_ID = ? WHERE CART_ID = ?",
-                cart.getOrderId(), cart.getCartId()
+                "UPDATE CARTS SET ORDER_ID = ? WHERE ID = ?",
+                cart.getOrderId(), cart.getId()
         );
-        return cart.getCartId();
+        return cart.getId();
     }
 
     @Override
@@ -54,7 +54,7 @@ public class JdbcCartRepository implements CartRepository{
         jdbcTemplate.update("DELETE FROM CARTS");
     }
 
-    private RowMapper<Cart> cartRowMapper() {
-        return (rs, rowNum) -> new Cart(rs.getString("CART_ID"), rs.getInt("ORDER_ID"));
+    private RowMapper<Carts> cartRowMapper() {
+        return (rs, rowNum) -> new Carts(rs.getString("ID"), rs.getInt("ORDER_ID"));
     }
 }

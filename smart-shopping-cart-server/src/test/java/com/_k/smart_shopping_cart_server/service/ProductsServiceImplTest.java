@@ -1,6 +1,9 @@
 package com._k.smart_shopping_cart_server.service;
 
 import com._k.smart_shopping_cart_server.domain.Products;
+import com._k.smart_shopping_cart_server.repository.CartsRepository;
+import com._k.smart_shopping_cart_server.repository.OrderDetailsRepository;
+import com._k.smart_shopping_cart_server.repository.OrdersRepository;
 import com._k.smart_shopping_cart_server.repository.ProductsRepository;
 import com._k.smart_shopping_cart_server.service.ProductsService;
 import org.assertj.core.api.Assertions;
@@ -24,10 +27,20 @@ class ProductsServiceImplTest {
     private ProductsService productsService;
 
     @Autowired
-    private ProductsRepository productsRepository;
+    ProductsRepository productsRepository;
+    @Autowired
+    OrdersRepository ordersRepository;
+    @Autowired
+    OrderDetailsRepository orderDetailsRepository;
+    @Autowired
+    CartsRepository cartsRepository;
 
     @BeforeEach
     void beforeEach() {
+        productsRepository.deleteAllProduct();
+        ordersRepository.deleteAllOrder();
+        orderDetailsRepository.deleteAllOrderDetail();
+        cartsRepository.deleteAllCart();
         productsRepository.saveProduct(new Products("1", "상품A", 1000, 10, "1A"));
         productsRepository.saveProduct(new Products("2", "상품B", 2000, 20, "2B"));
     }
@@ -40,8 +53,8 @@ class ProductsServiceImplTest {
         assertThat(product1ByBarcode.getName()).isEqualTo("상품A");
         assertThat(product2ByBarcode.getName()).isEqualTo("상품B");
 
-        Products product1ById = productsService.showProductInfoById(product1ByBarcode.getProductId());
-        Products product2ById = productsService.showProductInfoById(product2ByBarcode.getProductId());
+        Products product1ById = productsService.showProductInfoById(product1ByBarcode.getId());
+        Products product2ById = productsService.showProductInfoById(product2ByBarcode.getId());
 
         assertThat(product1ById.getName()).isEqualTo("상품A");
         assertThat(product2ById.getName()).isEqualTo("상품B");
@@ -50,10 +63,10 @@ class ProductsServiceImplTest {
     @Test
     void changeProductQuantity() {
         Products product1 = productsService.showProductInfoByBarcode("1");
-        productsService.changeProductQuantity(product1.getProductId(), 5);
+        productsService.changeProductQuantity(product1.getId(), 5);
 
-        assertThat(productsService.showProductInfoById(product1.getProductId()).getQuantity()).isEqualTo(5);
-        assertThatThrownBy(() -> productsService.changeProductQuantity(product1.getProductId(), 10)).isInstanceOf(IllegalStateException.class);
+        assertThat(productsService.showProductInfoById(product1.getId()).getQuantity()).isEqualTo(5);
+        assertThatThrownBy(() -> productsService.changeProductQuantity(product1.getId(), 10)).isInstanceOf(IllegalStateException.class);
     }
 
     @Test

@@ -23,15 +23,15 @@ public class JdbcOrdersRepository implements OrdersRepository{
     @Override
     public int saveOrder() {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        simpleJdbcInsert.withTableName("ORDERS").usingGeneratedKeyColumns("ORDER_ID");
+        simpleJdbcInsert.withTableName("ORDERS").usingGeneratedKeyColumns("ID");
         Map<String, Object> parameters = new HashMap<>();
-        parameters.put("TIMESTAMP", null);
+        parameters.put("ORDER_DATE_TIME", null);
         return simpleJdbcInsert.withTableName("ORDERS").executeAndReturnKey(parameters).intValue();
     }
 
     @Override
-    public Optional<Orders> readOrderByOrderId(int orderId) {
-        List<Orders> rs = jdbcTemplate.query("SELECT * FROM ORDERS WHERE ORDER_ID = ?", ordersRowMapper(), orderId);
+    public Optional<Orders> readOrderByOrderId(int id) {
+        List<Orders> rs = jdbcTemplate.query("SELECT * FROM ORDERS WHERE ID = ?", ordersRowMapper(), id);
         return rs.stream().findFirst();
     }
 
@@ -42,8 +42,11 @@ public class JdbcOrdersRepository implements OrdersRepository{
 
     @Override
     public int updateOrder(Orders order) {
-        jdbcTemplate.update("UPDATE ORDERS SET ORDER_DATE_TIME = ? WHERE ORDER_ID = ?", order.getOrderDateTime(), order.getOrderId());
-        return order.getOrderId();
+        jdbcTemplate.update(
+                "UPDATE ORDERS SET ORDER_DATE_TIME = ? WHERE ID = ?",
+                order.getOrderDateTime(), order.getId()
+        );
+        return order.getId();
     }
 
     @Override
@@ -52,6 +55,9 @@ public class JdbcOrdersRepository implements OrdersRepository{
     }
 
     private RowMapper<Orders> ordersRowMapper() {
-        return (rs, num) -> new Orders(rs.getInt("ORDER_ID"), rs.getString("ORDER_DATE_TIME"));
+        return (rs, num) -> new Orders(
+                rs.getInt("ID"),
+                rs.getString("ORDER_DATE_TIME")
+        );
     }
 }

@@ -2,7 +2,12 @@ package com._k.smart_shopping_cart_server.service;
 
 import com._k.smart_shopping_cart_server.domain.OrderDetails;
 import com._k.smart_shopping_cart_server.domain.Products;
+import com._k.smart_shopping_cart_server.repository.CartsRepository;
+import com._k.smart_shopping_cart_server.repository.OrderDetailsRepository;
+import com._k.smart_shopping_cart_server.repository.OrdersRepository;
+import com._k.smart_shopping_cart_server.repository.ProductsRepository;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -24,6 +29,23 @@ class OrderDetailsServiceImplTest {
     @Autowired
     OrderDetailsService orderDetailsService;
 
+    @Autowired
+    ProductsRepository productsRepository;
+    @Autowired
+    OrdersRepository ordersRepository;
+    @Autowired
+    OrderDetailsRepository orderDetailsRepository;
+    @Autowired
+    CartsRepository cartsRepository;
+
+    @BeforeEach
+     void beforeEach() {
+        productsRepository.deleteAllProduct();
+        ordersRepository.deleteAllOrder();
+        orderDetailsRepository.deleteAllOrderDetail();
+        cartsRepository.deleteAllCart();
+    }
+
     @Test
     void orderDetailsServiceMethodTest() {
         int product1Id = productsService.generateProduct(new Products("barcode1", "상품A", 1000, 10, "A1"));
@@ -35,7 +57,7 @@ class OrderDetailsServiceImplTest {
         Assertions.assertThat(orderDetail1.getProductId()).isEqualTo(product1Id);
 
         int orderDetail2Id = orderDetailsService.generateOrderDetail(new OrderDetails(order1Id, product2Id, 10));
-        List<OrderDetails> orderDetails = orderDetailsService.showOrderDetailListByDetailId(order1Id);
+        List<OrderDetails> orderDetails = orderDetailsService.showOrderDetailListByOrderId(order1Id);
         Assertions.assertThat(orderDetails.size()).isEqualTo(2);
     }
 }

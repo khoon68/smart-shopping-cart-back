@@ -24,19 +24,19 @@ public class JdbcOrderDetailsRepository implements OrderDetailsRepository {
     @Override
     public int saveOrderDetail(OrderDetails orderDetails) {
         SimpleJdbcInsert simpleJdbcInsert = new SimpleJdbcInsert(jdbcTemplate);
-        simpleJdbcInsert.withTableName("ORDERDETAILS").usingGeneratedKeyColumns("ORDER_DETAIL_ID");
+        simpleJdbcInsert.withTableName("ORDERDETAILS").usingGeneratedKeyColumns("ID");
 
         Map<String, Object> parameters = new HashMap<>();
         parameters.put("ORDER_ID", orderDetails.getOrderId());
         parameters.put("PRODUCT_ID", orderDetails.getProductId());
-        parameters.put("PRODUCT_QUANTITY", orderDetails.getProductQuantity());
+        parameters.put("QUANTITY", orderDetails.getQuantity());
 
         return simpleJdbcInsert.executeAndReturnKey(parameters).intValue();
     }
 
     @Override
-    public Optional<OrderDetails> readOrderDetailByOrderDetailId(int orderDetailId) {
-        List<OrderDetails> result = jdbcTemplate.query("SELECT * FROM ORDERDETAILS WHERE ORDER_DETAIL_ID = ?", orderDetailsRowMapper(), orderDetailId);
+    public Optional<OrderDetails> readOrderDetailByOrderDetailId(int id) {
+        List<OrderDetails> result = jdbcTemplate.query("SELECT * FROM ORDERDETAILS WHERE ID = ?", orderDetailsRowMapper(), id);
         return result.stream().findFirst();
     }
 
@@ -58,10 +58,10 @@ public class JdbcOrderDetailsRepository implements OrderDetailsRepository {
 
     private RowMapper<OrderDetails> orderDetailsRowMapper() {
         return (rs, rowNum) -> new OrderDetails(
-                rs.getInt("ORDER_DETAIL_ID"),
+                rs.getInt("ID"),
                 rs.getInt("ORDER_ID"),
                 rs.getInt("PRODUCT_ID"),
-                rs.getInt("PRODUCT_QUANTITY")
+                rs.getInt("QUANTITY")
         );
     }
 }

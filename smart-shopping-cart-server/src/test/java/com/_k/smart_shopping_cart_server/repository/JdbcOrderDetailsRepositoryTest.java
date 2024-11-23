@@ -3,6 +3,7 @@ package com._k.smart_shopping_cart_server.repository;
 import com._k.smart_shopping_cart_server.domain.OrderDetails;
 import com._k.smart_shopping_cart_server.domain.Products;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -13,13 +14,22 @@ import java.util.List;
 @SpringBootTest
 @Transactional
 class JdbcOrderDetailsRepositoryTest {
+    @Autowired
+    ProductsRepository productsRepository;
+    @Autowired
+    OrdersRepository ordersRepository;
+    @Autowired
+    OrderDetailsRepository orderDetailsRepository;
+    @Autowired
+    CartsRepository cartsRepository;
 
-    @Autowired
-    private OrderDetailsRepository orderDetailsRepository;
-    @Autowired
-    private OrdersRepository ordersRepository;
-    @Autowired
-    private ProductsRepository productsRepository;
+    @BeforeEach
+    void beforeEach() {
+        productsRepository.deleteAllProduct();
+        ordersRepository.deleteAllOrder();
+        orderDetailsRepository.deleteAllOrderDetail();
+        cartsRepository.deleteAllCart();
+    }
 
     @Test
     void orderDetailsMethodTest() {
@@ -28,7 +38,7 @@ class JdbcOrderDetailsRepositoryTest {
         int savedOrderDetail1Id = orderDetailsRepository.saveOrderDetail(new OrderDetails(savedOrder1Id, savedProduct1Id, 1));
 
         OrderDetails readOrderDetail1 = orderDetailsRepository.readOrderDetailByOrderDetailId(savedOrderDetail1Id).get();
-        Assertions.assertThat(readOrderDetail1.getOrderDetailId()).isEqualTo(savedOrderDetail1Id);
+        Assertions.assertThat(readOrderDetail1.getId()).isEqualTo(savedOrderDetail1Id);
 
         List<OrderDetails> orderDetails = orderDetailsRepository.readAllOrderDetail();
         Assertions.assertThat(orderDetails.size()).isEqualTo(1);

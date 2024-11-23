@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface OrderDetailsRepository {
     int saveOrderDetail(OrderDetails orderDetails);
-    Optional<OrderDetails> readOrderDetailByOrderDetailId(int orderDetailId);
+    Optional<OrderDetails> readOrderDetailByOrderDetailId(int id);
     List<OrderDetails> readOrderDetailListByOrderId(int orderId);
     List<OrderDetails> readAllOrderDetail();
     void deleteAllOrderDetail();

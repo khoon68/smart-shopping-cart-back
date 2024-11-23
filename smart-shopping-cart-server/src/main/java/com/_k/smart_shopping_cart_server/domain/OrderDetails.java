@@ -5,21 +5,21 @@ import lombok.Setter;
 
 @Getter
 public class OrderDetails {
-    private int orderDetailId;
+    private int id;
     private int orderId;
     private int productId;
-    private int productQuantity;
+    private int quantity;
 
-    public OrderDetails(int orderId, int productId, int productQuantity) {
+    public OrderDetails(int orderId, int productId, int quantity) {
         this.orderId = orderId;
         this.productId = productId;
-        this.productQuantity = productQuantity;
+        this.quantity = quantity;
     }
 
-    public OrderDetails(int orderDetailId, int orderId, int productId, int productQuantity) {
-        this.orderDetailId = orderDetailId;
+    public OrderDetails(int id, int orderId, int productId, int quantity) {
+        this.id = id;
         this.orderId = orderId;
         this.productId = productId;
-        this.productQuantity = productQuantity;
+        this.quantity = quantity;
     }
 }
